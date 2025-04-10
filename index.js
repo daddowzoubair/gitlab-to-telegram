@@ -19,10 +19,11 @@ app.post('/gitlab-webhook', async (req, res) => {
   try {
     switch (object_kind) {
       case 'push': {
-        const { user_username, project, commits } = req.body;
+        const { user_username, project, commits, ref } = req.body;
         const repoLink = `<a href="${project.web_url}">${project.name}</a>`;
         const userLink = `<a href="https://gitlab.com/${user_username}">${user_username}</a>`;
-        message += `📦 <b>Push Event</b>\n📁 Repository: ${repoLink}\n👨🏻‍💻 User: ${userLink}\nCommits:\n`;
+        const branchName = ref.split('/').pop();  // Extracting the branch name from ref
+        message += `📦 <b>Push Event</b>\n📁 Repository: ${repoLink}\n👨🏻‍💻 User: ${userLink}\nBranch: <b>${branchName}</b>\nCommits:\n`;
         for (const commit of commits) {
           message += `🔸 <a href="${commit.url}">${commit.message}</a>\n`;
         }
@@ -34,7 +35,9 @@ app.post('/gitlab-webhook', async (req, res) => {
         const repoLink = `<a href="${req.body.project.web_url}">${req.body.project.name}</a>`;
         const mrLink = `<a href="${mr.url}">${mr.title}</a>`;
         const userLink = `<a href="https://gitlab.com/${req.body.user.username}">${req.body.user.username}</a>`;
-        message += `🔀 <b>Merge Request</b>\n📁 Repository: ${repoLink}\n👨🏻‍💻 Author: ${userLink}\nTitle: ${mrLink}\nState: ${mr.state}`;
+        const sourceBranch = mr.source_branch;
+        const targetBranch = mr.target_branch;
+        message += `🔀 <b>Merge Request</b>\n📁 Repository: ${repoLink}\n👨🏻‍💻 Author: ${userLink}\nTitle: ${mrLink}\nState: ${mr.state}\nSource Branch: <b>${sourceBranch}</b>\nTarget Branch: <b>${targetBranch}</b>\nPull Request: ${mrLink}`;
         break;
       }
 
