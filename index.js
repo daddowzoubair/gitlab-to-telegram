@@ -8,6 +8,10 @@ const TELEGRAM_CHAT_ID = '670048444';
 const app = express();
 app.use(bodyParser.json());
 
+app.get('/', (req, res) => {
+    res.send('Webhook Telegram service is running!');
+});
+
 app.post('/gitlab-webhook', async (req, res) => {
   const { object_kind, user_username, project, commits } = req.body;
 
