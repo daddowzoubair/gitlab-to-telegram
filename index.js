@@ -4,6 +4,7 @@ const axios = require('axios');
 
 const TELEGRAM_BOT_TOKEN = '7385654536:AAH-4uOaT4uK56BAesDxydJZc5ju7h6uapc';
 const TELEGRAM_CHAT_ID = '670048444';
+const GITLAB_BASE_URL = 'https://gitlab.tikram-group.com/';
 
 const app = express();
 app.use(bodyParser.json());
@@ -21,7 +22,7 @@ app.post('/gitlab-webhook', async (req, res) => {
       case 'push': {
         const { user_username, project, commits, ref } = req.body;
         const repoLink = `<a href="${project.web_url}">${project.name}</a>`;
-        const userLink = `<a href="https://gitlab.com/${user_username}">${user_username}</a>`;
+        const userLink = `<a href="${GITLAB_BASE_URL}${user_username}">${user_username}</a>`;
         const branchName = ref.split('/').pop();  // Extracting the branch name from ref
         message += `📦 <b>Push Event</b>\n📁 Repository: ${repoLink}\n👨🏻‍💻 User: ${userLink}\nBranch: <b>${branchName}</b>\nCommits:\n`;
         for (const commit of commits) {
@@ -34,7 +35,7 @@ app.post('/gitlab-webhook', async (req, res) => {
         const mr = req.body.object_attributes;
         const repoLink = `<a href="${req.body.project.web_url}">${req.body.project.name}</a>`;
         const mrLink = `<a href="${mr.url}">${mr.title}</a>`;
-        const userLink = `<a href="https://gitlab.com/${req.body.user.username}">${req.body.user.username}</a>`;
+        const userLink = `<a href="${GITLAB_BASE_URL}${req.body.user.username}">${req.body.user.username}</a>`;
         const sourceBranch = mr.source_branch;
         const targetBranch = mr.target_branch;
         message += `🔀 <b>Merge Request</b>\n📁 Repository: ${repoLink}\n👨🏻‍💻 Author: ${userLink}\nTitle: ${mrLink}\nState: ${mr.state}\nSource Branch: <b>${sourceBranch}</b>\nTarget Branch: <b>${targetBranch}</b>\nPull Request: ${mrLink}`;
@@ -45,7 +46,7 @@ app.post('/gitlab-webhook', async (req, res) => {
         const issue = req.body.object_attributes;
         const repoLink = `<a href="${req.body.project.web_url}">${req.body.project.name}</a>`;
         const issueLink = `<a href="${issue.url}">${issue.title}</a>`;
-        const userLink = `<a href="https://gitlab.com/${req.body.user.username}">${req.body.user.username}</a>`;
+        const userLink = `<a href="${GITLAB_BASE_URL}${req.body.user.username}">${req.body.user.username}</a>`;
         message += `📌 <b>Issue</b>\n📁 Repository: ${repoLink}\n👨🏻‍💻 Author: ${userLink}\nIssue: ${issueLink}\nAction: ${issue.action}`;
         break;
       }
@@ -53,7 +54,7 @@ app.post('/gitlab-webhook', async (req, res) => {
       case 'note': {
         const note = req.body.object_attributes;
         const repoLink = `<a href="${req.body.project.web_url}">${req.body.project.name}</a>`;
-        const userLink = `<a href="https://gitlab.com/${req.body.user.username}">${req.body.user.username}</a>`;
+        const userLink = `<a href="${GITLAB_BASE_URL}${req.body.user.username}">${req.body.user.username}</a>`;
         message += `💬 <b>Comment</b>\n📁 Repository: ${repoLink}\n👨🏻‍💻 Author: ${userLink}\nNote: ${note.note}\n<a href="${note.url}">View Comment</a>`;
         break;
       }
@@ -62,7 +63,7 @@ app.post('/gitlab-webhook', async (req, res) => {
         const { ref, user_name, project } = req.body;
         const tagName = ref.split('/').pop();
         const repoLink = `<a href="${project.web_url}">${project.name}</a>`;
-        const userLink = `<a href="https://gitlab.com/${user_name}">${user_name}</a>`;
+        const userLink = `<a href="${GITLAB_BASE_URL}${user_name}">${user_name}</a>`;
         message += `🏷 <b>New Tag</b>\n📁 Repository: ${repoLink}\n👨🏻‍💻 User: ${userLink}\nTag: <b>${tagName}</b>`;
         break;
       }
