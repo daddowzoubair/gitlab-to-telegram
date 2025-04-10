@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const axios = require('axios');
 
 const TELEGRAM_BOT_TOKEN = '7385654536:AAH-4uOaT4uK56BAesDxydJZc5ju7h6uapc';
-const TELEGRAM_CHAT_ID = '@670048444';
+const TELEGRAM_CHAT_ID = '670048444';
 
 const app = express();
 app.use(bodyParser.json());
@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 app.post('/gitlab-webhook', async (req, res) => {
   const { object_kind, user_username, project, commits } = req.body;
 
-  let message = `🧠 <b>GitLab Update</b>\nProject: ${project.name}\nUser: ${user_username}`;
+  let message = `❗️ <b>GitLab Update</b>\nProject: ${project.name}\n👨🏻‍💻 User: ${user_username}`;
 
   if (object_kind === 'push') {
     message += `\nCommits:\n`;
