@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const axios = require('axios');
 
 const TELEGRAM_BOT_TOKEN = '7385654536:AAH-4uOaT4uK56BAesDxydJZc5ju7h6uapc';
-const TELEGRAM_CHAT_ID = '670048444';
+const TELEGRAM_CHAT_ID = '-4890664705';
 const GITLAB_BASE_URL = 'https://gitlab.tikram-group.com/';
 
 const app = express();
