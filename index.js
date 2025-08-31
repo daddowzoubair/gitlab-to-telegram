@@ -52,7 +52,8 @@ app.post('/gitlab-webhook', async (req, res) => {
       case 'merge_request': {
         const mr = req.body.object_attributes;
         const repoLink = `<a href="${GITLAB_BASE_URL}${req.body.project.path_with_namespace}">${req.body.project.name}</a>`;
-        const mrLink = `<a href="${mr.url}">${mr.title}</a>`;
+        const mrUrl = `${GITLAB_BASE_URL}${req.body.project.path_with_namespace}/-/merge_requests/${mr.iid}`;
+        const mrLink = `<a href="${mrUrl}">${mr.title}</a>`;
         const userLink = `<a href="${GITLAB_BASE_URL}${req.body.user.username}">${req.body.user.username}</a>`;
         const sourceBranch = mr.source_branch;
         const targetBranch = mr.target_branch;
